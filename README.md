@@ -1,4 +1,4 @@
-# Rest API Skynet
+# Lapalm rest api
 
 Welcome to the Lapalmrestapi project! This repository contains a Node.js-based REST API for Lapalm. This guide will walk you through the steps to install and run the project, including how to use Docker to containerize the application.
 
