@@ -13,7 +13,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   Company.init(
     {
-      id: DataTypes.INTEGER,
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       name: DataTypes.STRING,
       domainExtension: DataTypes.STRING,
       createdAt: DataTypes.DATE,
