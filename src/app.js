@@ -1,4 +1,8 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
 
 module.exports = function () {
   const app = express();
@@ -13,6 +17,20 @@ module.exports = function () {
     );
     return this;
   };
+
+  app.use(helmet.xssFilter());
+  app.use(helmet.noSniff());
+  app.use(helmet.frameguard());
+  app.use(helmet.hidePoweredBy());
+  app.use(helmet());
+
+  app.use(cors());
+
+  // log all requests to the console
+  app.use(morgan("common"));
+
+  app.use(bodyParser.json({ limit: "5mb" }));
+  app.use(bodyParser.urlencoded({ extended: true }));
 
   app.get("/", (req, res) => {
     res.send("Hello!");
