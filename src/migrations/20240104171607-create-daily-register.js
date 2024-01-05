@@ -15,14 +15,14 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "users",
+          model: "Users",
           key: "id",
         },
       },
       companyId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "companies",
+          model: "Companies",
           key: "id",
         },
       },
