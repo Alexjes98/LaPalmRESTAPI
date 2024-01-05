@@ -17,7 +17,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   Gondola.init(
     {
-      id: DataTypes.INTEGER,
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       code: DataTypes.STRING,
       companyId: DataTypes.INTEGER,
       createdAt: DataTypes.DATE,

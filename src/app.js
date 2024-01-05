@@ -4,13 +4,15 @@ const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
 
+const apiRouter = require("./routes");
+
 module.exports = function () {
   const app = express();
 
   app.response.json = function (body) {
     this.contentType("json").end(
       JSON.stringify({
-        code: this.statusCode,
+        status: this.statusCode,
         message: body.message ?? "",
         data: body.data ?? {},
       })
@@ -35,6 +37,8 @@ module.exports = function () {
   app.get("/", (req, res) => {
     res.send("Hello!");
   });
+
+  app.use("/api", apiRouter);
 
   app.use((req, res, next) => {
     res.status(404).send("Sorry can't find that!");
