@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Batches", {
+    await queryInterface.createTable("Employees", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,10 +12,23 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
+      code: {
+        type: Sequelize.STRING,
+      },
+      payrollType: {
+        type: Sequelize.BOOLEAN,
+      },
       companyId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "companies",
+          model: "Companies",
+          key: "id",
+        },
+      },
+      positionId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: "Positions",
           key: "id",
         },
       },
@@ -32,6 +45,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Batches");
+    await queryInterface.dropTable("Employees");
   },
 };
