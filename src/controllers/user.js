@@ -32,7 +32,15 @@ const createUser = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
+const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findOne({ where: { id } });
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll();
