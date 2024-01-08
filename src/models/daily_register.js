@@ -21,7 +21,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   DailyRegister.init(
     {
-      id: DataTypes.INTEGER,
+      id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+      },
       body: DataTypes.TEXT,
       userId: DataTypes.INTEGER,
       companyId: DataTypes.INTEGER,
