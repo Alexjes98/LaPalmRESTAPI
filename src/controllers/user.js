@@ -26,7 +26,10 @@ const createUser = async (req, res) => {
       companyId,
     });
 
-    res.status(201).json(user);
+    res.status(201).json({
+      data: user,
+      message: "User created successfully",
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "Internal server error" });
@@ -36,7 +39,9 @@ const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findOne({ where: { id } });
-    res.status(200).json(user);
+    res
+      .status(200)
+      .json({ data: user, message: "User retrieved successfully" });
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -44,7 +49,9 @@ const getUserById = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll();
-    res.status(200).json(users);
+    res
+      .status(200)
+      .json({ data: users, message: "Users retrieved successfully" });
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -53,4 +60,5 @@ const getAllUsers = async (req, res) => {
 module.exports = {
   createUser,
   getAllUsers,
+  getUserById,
 };
