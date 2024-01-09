@@ -1,5 +1,6 @@
 const { User } = require("../models");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const createUser = async (req, res) => {
   try {
@@ -57,8 +58,41 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const loginUser = async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    // Validate request parameters
+    if (!(username && password)) {
+      res.status(400).send("All input is required");
+      return;
+    }
+    // Validate if user exist in our database
+    const user = await User.findOne({ where: { username } });
+    if (user && (await bcrypt.compare(password, user.password))) {
+      // Create token
+      const token =
+        "Bearer " +
+        jwt.sign({ userId: user.id, username }, process.env.SECRET_KEY, {
+          expiresIn: "24h",
+        });
+
+      // save user token
+      user.token = token;
+      // user
+      res.status(200).json({
+        data: user,
+        message: "User logged in successfully",
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   createUser,
   getAllUsers,
   getUserById,
+  loginUser,
 };

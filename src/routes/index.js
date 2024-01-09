@@ -10,14 +10,19 @@ const employeesRouter = require("./employees");
 const batchesRouter = require("./batches");
 const dailyRegistersRouter = require("./daily_registers");
 
-router.use("/users", userRouter);
-router.use("/companies", companiesRouter);
-router.use("/gondolas", gondolasRouter);
-router.use("/fronts", frontsRouter);
-router.use("/positions", positionsRouter);
-router.use("/equipments", equipmentsRouter);
-router.use("/employees", employeesRouter);
-router.use("/batches", batchesRouter);
-router.use("/daily_registers", dailyRegistersRouter);
+const authRouter = require("./auth");
+
+const validateToken = require("../middlewares/auth");
+
+router.use("/users", validateToken, userRouter);
+router.use("/companies", validateToken, companiesRouter);
+router.use("/gondolas", validateToken, gondolasRouter);
+router.use("/fronts", validateToken, frontsRouter);
+router.use("/positions", validateToken, positionsRouter);
+router.use("/equipments", validateToken, equipmentsRouter);
+router.use("/employees", validateToken, employeesRouter);
+router.use("/batches", validateToken, batchesRouter);
+router.use("/daily_registers", validateToken, dailyRegistersRouter);
+router.use("/auth", authRouter);
 
 module.exports = router;
