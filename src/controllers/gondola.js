@@ -28,16 +28,28 @@ const createGondola = async (req, res) => {
 
 const getGondolaById = async (req, res) => {
   try {
-    const { id } = req.params;
-    const gondola = await Gondola.findOne({ where: { id } });
+    const { id, companyId } = req.params;
+    const gondola = await Gondola.findOne({ where: { id, companyId } });
     res
       .status(200)
       .json({ data: gondola, message: "Gondola retrieved successfully" });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
+const getGondolasByCompany = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const gondolas = await Gondola.findAll({ where: { companyId: id } });
+    res
+      .status(200)
+      .json({ data: gondolas, message: "Gondolas retrieved successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 const getAllGondolas = async (req, res) => {
   try {
     const gondolas = await Gondola.findAll();
@@ -53,4 +65,5 @@ module.exports = {
   createGondola,
   getAllGondolas,
   getGondolaById,
+  getGondolasByCompany,
 };

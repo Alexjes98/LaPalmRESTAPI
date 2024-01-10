@@ -20,12 +20,13 @@ const createBatch = async (req, res) => {
 
 const getBatchById = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id, companyId } = req.params;
     const batch = await Batch.findOne({ where: { id, companyId } });
     res
       .status(200)
       .json({ data: batch, message: "Batch retrieved successfully" });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: "Internal server error" });
   }
 };
