@@ -21,7 +21,7 @@ const createBatch = async (req, res) => {
 const getBatchById = async (req, res) => {
   try {
     const { id } = req.params;
-    const batch = await Batch.findOne({ where: { id } });
+    const batch = await Batch.findOne({ where: { id, companyId } });
     res
       .status(200)
       .json({ data: batch, message: "Batch retrieved successfully" });
@@ -41,8 +41,23 @@ const getAllBatches = async (req, res) => {
   }
 };
 
+const getBatchesByCompany = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const batches = await Batch.findAll({
+      where: { companyId: id },
+    });
+    res
+      .status(200)
+      .json({ data: batches, message: "Batches retrieved successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   createBatch,
   getAllBatches,
   getBatchById,
+  getBatchesByCompany,
 };
