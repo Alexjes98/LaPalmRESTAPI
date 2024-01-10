@@ -42,6 +42,38 @@ const getAllDailyRegisters = async (req, res) => {
       message: "DailyRegisters retrieved successfully",
     });
   } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const getDailyRegistersByCompanyId = async (req, res) => {
+  try {
+    const { companyId } = req.params;
+    const dailyRegisters = await DailyRegister.findAll({
+      where: { companyId },
+    });
+    res.status(200).json({
+      data: dailyRegisters,
+      message: "DailyRegisters retrieved successfully",
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const getTodayDailyRegistersByCompanyId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const dailyRegisters = await DailyRegister.findAll({
+      where: { companyId: id, registerDate: new Date() },
+    });
+    res.status(200).json({
+      data: dailyRegisters,
+      message: "DailyRegisters retrieved successfully",
+    });
+  } catch (err) {
+    console.log(err);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -50,4 +82,6 @@ module.exports = {
   createDailyRegister,
   getAllDailyRegisters,
   getDailyRegisterById,
+  getDailyRegistersByCompanyId,
+  getTodayDailyRegistersByCompanyId,
 };
