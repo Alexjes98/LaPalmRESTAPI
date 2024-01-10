@@ -25,11 +25,10 @@ const createFront = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 const getFrontById = async (req, res) => {
   try {
-    const { id } = req.params;
-    const front = await Front.findOne({ where: { id } });
+    const { id, companyId } = req.params;
+    const front = await Front.findOne({ where: { id, companyId } });
     res
       .status(200)
       .json({ data: front, message: "Front retrieved successfully" });
@@ -37,7 +36,18 @@ const getFrontById = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
+const getFrontsByCompany = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const fronts = await Front.findAll({ where: { companyId: id } });
+    res
+      .status(200)
+      .json({ data: fronts, message: "Fronts retrieved successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 const getAllFronts = async (req, res) => {
   try {
     const fronts = await Front.findAll();
@@ -53,4 +63,5 @@ module.exports = {
   createFront,
   getAllFronts,
   getFrontById,
+  getFrontsByCompany,
 };
