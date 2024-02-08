@@ -2,14 +2,28 @@ const { Gondola } = require("../models");
 
 const createGondola = async (req, res) => {
   try {
-    const { code, companyId } = req.body;
-
+    const { code, companyId, type, plate, description } = req.body;
     // Validate request parameters
     if (!code) {
       res.status(400).send("Code is required");
       return;
     }
-
+    if (!companyId) {
+      res.status(400).send("Company Id is required");
+      return;
+    }
+    if (!type) {
+      res.status(400).send("Type is required");
+      return;
+    }
+    if (!plate) {
+      res.status(400).send("Plate is required");
+      return;
+    }
+    if (!description) {
+      res.status(400).send("Description is required");
+      return;
+    }
     // Check if gondola already exist
     const oldGondola = await Gondola.findOne({ where: { code } });
     if (oldGondola) {
@@ -17,7 +31,13 @@ const createGondola = async (req, res) => {
     }
 
     // Create gondola in the database
-    const gondola = await Gondola.create({ code, companyId });
+    const gondola = await Gondola.create({
+      code,
+      companyId,
+      type,
+      plate,
+      description,
+    });
 
     res.status(201).json(gondola);
   } catch (err) {

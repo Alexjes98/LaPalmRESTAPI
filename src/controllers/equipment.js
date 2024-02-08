@@ -2,16 +2,43 @@ const { Equipment } = require("../models");
 
 const createEquipment = async (req, res) => {
   try {
-    const { name, companyId } = req.body;
+    const { name, companyId, type, code, plate, description } = req.body;
     if (!name) {
       res.status(400).send("Name is required");
+      return;
+    }
+    if (!companyId) {
+      res.status(400).send("Company Id is required");
+      return;
+    }
+    if (!type) {
+      res.status(400).send("Type is required");
+      return;
+    }
+    if (!code) {
+      res.status(400).send("Code is required");
+      return;
+    }
+    if (!plate) {
+      res.status(400).send("Plate is required");
+      return;
+    }
+    if (!description) {
+      res.status(400).send("Description is required");
       return;
     }
     const oldEquipment = await Equipment.findOne({ where: { name } });
     if (oldEquipment) {
       return res.status(409).send("Equipment Already Exist");
     }
-    const equipment = await Equipment.create({ name, companyId });
+    const equipment = await Equipment.create({
+      name,
+      companyId,
+      type,
+      code,
+      plate,
+      description,
+    });
     res.status(201).json(equipment);
   } catch (err) {
     console.log(err);

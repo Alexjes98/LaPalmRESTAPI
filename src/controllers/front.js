@@ -2,11 +2,15 @@ const { Front } = require("../models");
 
 const createFront = async (req, res) => {
   try {
-    const { name, companyId } = req.body;
+    const { name, department, companyId } = req.body;
 
     // Validate request parameters
     if (!name) {
       res.status(400).send("Name is required");
+      return;
+    }
+    if (!department) {
+      res.status(400).send("Department is required");
       return;
     }
 
@@ -17,7 +21,7 @@ const createFront = async (req, res) => {
     }
 
     // Create front in the database
-    const front = await Front.create({ name, companyId });
+    const front = await Front.create({ name, department, companyId });
 
     res.status(201).json(front);
   } catch (err) {

@@ -3,7 +3,6 @@ const sequelize = require("./src/database/database.js");
 
 const app = makeApp();
 
-app.listen(5000, async () => {
+app.listen(45457, async () => {
   await sequelize.authenticate();
-  console.log("Server listening on port 5000!");
 });
