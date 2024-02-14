@@ -12,6 +12,10 @@ module.exports = {
       body: {
         type: Sequelize.TEXT,
       },
+      registerDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
       userId: {
         type: Sequelize.INTEGER,
         references: {

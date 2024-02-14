@@ -12,6 +12,9 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
+      department: {
+        type: Sequelize.STRING,
+      },
       companyId: {
         type: Sequelize.INTEGER,
         references: {

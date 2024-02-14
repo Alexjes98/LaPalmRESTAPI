@@ -24,6 +24,9 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       code: DataTypes.STRING,
+      type: DataTypes.STRING,
+      plate: DataTypes.STRING,
+      description: DataTypes.STRING,
       companyId: DataTypes.INTEGER,
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE,
@@ -31,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Gondola",
+      tableName: "Gondolas",
     }
   );
   return Gondola;

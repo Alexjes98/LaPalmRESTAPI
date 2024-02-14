@@ -5,5 +5,4 @@ const app = makeApp();
 
 app.listen(5000, async () => {
   await sequelize.authenticate();
-  console.log("Server listening on port 5000!");
 });

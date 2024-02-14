@@ -19,6 +19,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
+  //TODO Add employeeId, BatchId, FrontId, GondolaId, EquipmentId, supervisorId (EmployeeId)
+  //TODO Add quantities values
   DailyRegister.init(
     {
       id: {
@@ -28,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       body: DataTypes.TEXT,
+      registerDate: DataTypes.DATE,
       userId: DataTypes.INTEGER,
       companyId: DataTypes.INTEGER,
       createdAt: DataTypes.DATE,
@@ -36,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "DailyRegister",
+      tableName: "DailyRegisters",
     }
   );
   return DailyRegister;

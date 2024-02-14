@@ -12,6 +12,18 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
+      type: {
+        type: Sequelize.STRING,
+      },
+      code: {
+        type: Sequelize.STRING,
+      },
+      plate: {
+        type: Sequelize.STRING,
+      },
+      description: {
+        type: Sequelize.STRING,
+      },
       companyId: {
         type: Sequelize.INTEGER,
         references: {

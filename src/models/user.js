@@ -24,14 +24,17 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       username: { type: DataTypes.STRING },
+      email: { type: DataTypes.STRING },
       password: { type: DataTypes.STRING },
       companyId: { type: DataTypes.INTEGER },
+      termsObject: { type: DataTypes.JSON },
       createdAt: { type: DataTypes.DATE },
       updatedAt: { type: DataTypes.DATE },
     },
     {
       sequelize,
       modelName: "User",
+      tableName: "Users",
     }
   );
   return User;
