@@ -6,14 +6,15 @@ const createUser = async (req, res) => {
   try {
     const { username, email, password, companyId, termsObject } = req.body;
     // Validate request parameters
+    const parsedTermsObject = JSON.parse(termsObject);
     if (!(username && password && companyId && email && termsObject)) {
       res.status(400).send("All input is required");
       return;
     }
     if (
-      termsObject.termsHash === undefined ||
-      termsObject.termsVersion === undefined ||
-      termsObject.termsAcceptedAt === undefined
+      parsedTermsObject.termsHash === undefined ||
+      parsedTermsObject.termsVersion === undefined ||
+      parsedTermsObject.termsAcceptedAt === undefined
     ) {
       res.status(400).send("All termsObject input is required");
       return;
@@ -32,7 +33,7 @@ const createUser = async (req, res) => {
       username,
       email,
       password: encryptedPassword,
-      companyId,
+      companyId: parseInt(companyId),
       termsObject,
     });
 
