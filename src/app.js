@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const path = require('path');
 
 const apiRouter = require("./routes");
 
@@ -36,6 +37,11 @@ module.exports = function () {
 
   app.get("/", (req, res) => {
     res.send("API RUNNIN CORRECTLY!");
+  });
+
+  app.get('/download', function(req, res){
+    const file = `${__dirname}/assets/download/Stipe1.1.0.apk`;
+    res.download(file);
   });
 
   app.use("/api", apiRouter);
