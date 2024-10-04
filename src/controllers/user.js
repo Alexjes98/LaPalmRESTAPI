@@ -39,20 +39,19 @@ const resetPasswordRequest = async (req, res) => {
   await transporter.sendMail({
     from: process.env.SMTP_USERNAME, // sender address
     to: email, // list of receivers
-    subject: "Stipe Password Reset Request", // Subject line
-    text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n`,
-    html: `
-    <h2>Password Reset Request</h2>
-    <p>Hello,</p>
-    <p>You are receiving this because you (or someone else) have requested the reset of the password for your account.</p>
-    <p>Please click on the following link, or paste this into your browser to complete the process:</p>
-    <a href="http://localhost:5173/#/resetPassword?data=${user.resetPasswordToken}">Reset Password</a>
-    <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
-    <p>Thank you!</p>
-  `,
+    subject: "Solicitud de Restablecimiento de Contraseña de Stipe", // Subject line
+    text: `Estás recibiendo esto porque tú (o alguien más) has solicitado el restablecimiento de la contraseña para tu cuenta.\n\n`,
+    html: `    
+    <h2>Solicitud de Restablecimiento de Contraseña</h2>
+    <p>Hola,</p>
+    <p>Estás recibiendo esto porque tú (o alguien más) has solicitado el restablecimiento de la contraseña para tu cuenta.</p>
+    <p>Por favor, haz clic en el siguiente enlace o pégalo en tu navegador para completar el proceso:</p>
+    <a href="${process.env.SITE_URL}/#/resetPassword?data=${user.resetPasswordToken}">Restablecer Contraseña</a>
+    <p>Si no solicitaste esto, por favor ignora este correo electrónico y tu contraseña permanecerá sin cambios.</p>
+    <p>¡Gracias!</p>`,
   });
 
-  res.send("Password reset email has been sent for user");
+  res.status(200).json({ message: "Password reset link sent successfully" });
 };
 
 const resetPassword = async (req, res) => {
