@@ -28,6 +28,9 @@ module.exports = {
           key: "id",
         },
       },
+      resetPasswordToken: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -28,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       password: { type: DataTypes.STRING },
       companyId: { type: DataTypes.INTEGER },
       termsObject: { type: DataTypes.JSON },
+      resetPasswordToken: { type: DataTypes.STRING },
       createdAt: { type: DataTypes.DATE },
       updatedAt: { type: DataTypes.DATE },
     },
