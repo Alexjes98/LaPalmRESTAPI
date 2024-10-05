@@ -6,7 +6,7 @@ const nodemailer = require("nodemailer");
 const { json } = require("sequelize");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: process.env.SMTP_HOST,
   port: 465,
   secure: true, // Use `true` for port 465, `false` for all other ports
   auth: {
