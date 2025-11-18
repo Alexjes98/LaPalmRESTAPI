@@ -23,7 +23,7 @@
     "morgan": "^1.10.0",
     "pg": "^8.13.1",
     "nodemailer": "^6.9.15",
-    "sequelize": "^6.37.0"
+    "sequelize": "^6.37.5"
   },
   "devDependencies": {
     "sequelize-cli": "^6.6.2"
