@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Company } = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -35,15 +35,14 @@ const resetPasswordRequest = async (req, res) => {
     { where: { email } }
   );
 
-  // Send email with password reset token (left as an exercise for the reader)
   await transporter.sendMail({
-    from: process.env.SMTP_USERNAME, // sender address
-    to: email, // list of receivers
-    subject: "Solicitud de Restablecimiento de Contraseña de Stipe", // Subject line
+    from: process.env.SMTP_USERNAME,
+    to: email,
+    subject: "Solicitud de Restablecimiento de Contraseña de Stipe",
     text: `Estás recibiendo esto porque tú (o alguien más) has solicitado el restablecimiento de la contraseña para tu cuenta.\n\n`,
     html: `    
     <h2>Solicitud de Restablecimiento de Contraseña</h2>
-    <p>Hola,</p>
+    <p>Hola, ${user.username},</p>
     <p>Estás recibiendo esto porque tú (o alguien más) has solicitado el restablecimiento de la contraseña para tu cuenta.</p>
     <p>Por favor, haz clic en el siguiente enlace o pégalo en tu navegador para completar el proceso:</p>
     <a href="${process.env.SITE_URL}/#/resetPassword?data=${user.resetPasswordToken}">Restablecer Contraseña</a>
@@ -61,7 +60,7 @@ const resetPassword = async (req, res) => {
       where: {
         resetPasswordToken: token,
       },
-    });    
+    });
     if (!user) {
       res.status(400).send("Password reset token is invalid or has expired.");
     }
@@ -139,9 +138,20 @@ const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findOne({ where: { id } });
+
+    const company = await Company.findOne({ where: { id: user.companyId } });
     res
       .status(200)
-      .json({ data: user, message: "User retrieved successfully" });
+      .json({
+        data: {
+          id: user.id,
+          username: user.username,
+          companyId: user.companyId,
+          companyName: company.name,
+          companyDomainExtension: company.domainExtension,
+        },
+        message: "User retrieved successfully",
+      });
   } catch (err) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -186,7 +196,12 @@ const loginUser = async (req, res) => {
 
       // save user token
       res.status(200).json({
-        data: { username: user.username, companyId: user.companyId, token },
+        data: {
+          id: user.id,
+          username: user.username,
+          companyId: user.companyId,
+          token,
+        },
         message: "User logged in successfully",
       });
     } else {

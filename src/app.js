@@ -39,11 +39,6 @@ module.exports = function () {
     res.send("API RUNNIN CORRECTLY!");
   });
 
-  app.get('/download', function(req, res){
-    const file = `${__dirname}/assets/download/Stipe1.1.0.apk`;
-    res.download(file);
-  });
-
   app.use("/api", apiRouter);
 
   app.use((req, res, next) => {
