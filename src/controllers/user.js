@@ -173,9 +173,18 @@ const getUserById = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.destroy({ where: { id } });
+
+    // Ensure the authenticated user is requesting their own data
+    if (req.user && req.user.userId !== parseInt(id)) {
+      return res.status(403).json({ error: "Access denied. You can only delete your own profile." });
+    }
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    await User.destroy({ where: { id } });
     res.status(200).json({ message: "User deleted successfully" });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: "Internal server error" });
   }
 };
