@@ -12,6 +12,7 @@ const validateToken = (req, res, next) => {
   try {
     const validToken = jwt.verify(accessToken, process.env.SECRET_KEY);
     if (validToken) {
+      req.user = validToken;
       req.authenticated = true;
       return next();
     }

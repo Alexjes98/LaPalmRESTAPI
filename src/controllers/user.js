@@ -137,22 +137,36 @@ const createUser = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
+
+    // Ensure the authenticated user is requesting their own data
+    if (req.user && req.user.userId !== parseInt(id)) {
+      return res.status(403).json({ error: "Access denied. You can only view your own profile." });
+    }
+
     const user = await User.findOne({ where: { id } });
 
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
     const company = await Company.findOne({ where: { id: user.companyId } });
+    
     res
       .status(200)
       .json({
         data: {
-          id: user.id,
+          id: user.id.toString(),
           username: user.username,
-          companyId: user.companyId,
-          companyName: company.name,
-          companyDomainExtension: company.domainExtension,
+          email: user.email,
+          companyId: user.companyId.toString(),
+          companyName: company ? company.name : null,
+          companyDomainExtension: company ? company.domainExtension : null,
+          createdAt: user.createdAt,
         },
         message: "User retrieved successfully",
       });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: "Internal server error" });
   }
 };
