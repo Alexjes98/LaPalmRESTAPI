@@ -94,12 +94,20 @@ const createUser = async (req, res) => {
   try {
     const { username, email, password, companyId, termsObject } = req.body;
     // Validate request parameters
-    const parsedTermsObject = JSON.parse(termsObject);
     if (!(username && password && companyId && email && termsObject)) {
       res.status(400).send("All input is required");
       return;
     }
+    let parsedTermsObject;
+    try {
+      parsedTermsObject =
+        typeof termsObject === "string" ? JSON.parse(termsObject) : termsObject;
+    } catch (e) {
+      res.status(400).send("All termsObject input is required");
+      return;
+    }
     if (
+      !parsedTermsObject ||
       parsedTermsObject.termsHash === undefined ||
       parsedTermsObject.termsVersion === undefined ||
       parsedTermsObject.termsAcceptedAt === undefined
