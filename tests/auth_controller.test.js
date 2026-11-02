@@ -37,6 +37,14 @@ describe("Auth Controller Endpoint Validation", () => {
       assert.equal(res.status, 400);
       assert.equal(res.text, "All input is required");
     });
+
+    it("Rejects login when only email is supplied", async () => {
+      const res = await request(app)
+        .post("/api/auth/login")
+        .send({ email: "user@example.com" });
+      assert.equal(res.status, 400);
+      assert.equal(res.text, "All input is required");
+    });
   });
 
   describe("POST /api/auth/resetPasswordRequest", () => {

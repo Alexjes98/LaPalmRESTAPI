@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const nodemailer = require("nodemailer");
-const { json } = require("sequelize");
+const { json, Op } = require("sequelize");
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -209,27 +209,37 @@ const getAllUsers = async (req, res) => {
 
 const loginUser = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { email, username, password } = req.body;
+    const identifier = email || username;
     // Validate request parameters
-    if (!(username && password)) {
+    if (!(identifier && password)) {
       res.status(400).send("All input is required");
       return;
     }
-    // Validate if user exist in our database
-    const user = await User.findOne({ where: { username } });
+    // Validate if user exists in our database by email or username
+    const user = await User.findOne({
+      where: {
+        [Op.or]: [{ email: identifier }, { username: identifier }],
+      },
+    });
     if (user && (await bcrypt.compare(password, user.password))) {
       // Create token
       const token =
         "Bearer " +
-        jwt.sign({ userId: user.id, username }, process.env.SECRET_KEY, {
-          expiresIn: "24h",
-        });
+        jwt.sign(
+          { userId: user.id, username: user.username, email: user.email },
+          process.env.SECRET_KEY,
+          {
+            expiresIn: "24h",
+          }
+        );
 
       // save user token
       res.status(200).json({
         data: {
           id: user.id,
           username: user.username,
+          email: user.email,
           companyId: user.companyId,
           token,
         },
