@@ -7,6 +7,8 @@ const equipmentController = require("./equipment");
 const employeeController = require("./employee");
 const batchController = require("./batch");
 const dailyRegisterController = require("./daily_register");
+const organizationController = require("./organization");
+const organizationCensoController = require("./organization_censo");
 
 module.exports = {
   userController,
@@ -18,4 +20,6 @@ module.exports = {
   employeeController,
   batchController,
   dailyRegisterController,
+  organizationController,
+  organizationCensoController,
 };

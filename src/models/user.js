@@ -12,6 +12,18 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "companyId",
         as: "company",
       });
+      if (models.Organization) {
+        User.hasMany(models.Organization, {
+          foreignKey: "ownerId",
+          as: "ownedOrganizations",
+        });
+      }
+      if (models.OrganizationMember) {
+        User.hasMany(models.OrganizationMember, {
+          foreignKey: "userId",
+          as: "organizationMemberships",
+        });
+      }
       // define association here
     }
   }

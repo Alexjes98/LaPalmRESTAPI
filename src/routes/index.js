@@ -9,6 +9,7 @@ const equipmentsRouter = require("./equipments");
 const employeesRouter = require("./employees");
 const batchesRouter = require("./batches");
 const dailyRegistersRouter = require("./daily_registers");
+const organizationsRouter = require("./organizations");
 
 const authRouter = require("./auth");
 
@@ -23,6 +24,7 @@ router.use("/equipments", validateToken, equipmentsRouter);
 router.use("/employees", validateToken, employeesRouter);
 router.use("/batches", validateToken, batchesRouter);
 router.use("/daily_registers", validateToken, dailyRegistersRouter);
+router.use("/organizations", validateToken, organizationsRouter);
 router.use("/auth", authRouter);
 
 module.exports = router;
