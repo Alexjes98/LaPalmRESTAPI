@@ -101,6 +101,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: 0,
       },
+      diasCiclo: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       submissionCount: {
         type: DataTypes.INTEGER,
         allowNull: false,

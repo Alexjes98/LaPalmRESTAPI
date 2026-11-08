@@ -113,6 +113,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: 0,
       },
+      diasCiclo: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
       longitud: {
         type: DataTypes.DOUBLE,
         allowNull: true,

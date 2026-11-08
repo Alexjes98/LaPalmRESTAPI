@@ -72,6 +72,10 @@ function formatDailyResultForClient(dailyResult, loteCode) {
     totalRff: dailyResult.totalRff,
     totalHojas: dailyResult.totalHojas,
     totalPepas: dailyResult.totalPepas,
+    diasCiclo:
+      dailyResult.diasCiclo !== null && dailyResult.diasCiclo !== undefined
+        ? Number(dailyResult.diasCiclo)
+        : null,
     submissionCount: dailyResult.submissionCount || 1,
     contributors,
     usuario: contributors.length > 0 ? contributors.join(", ") : null,
@@ -118,6 +122,19 @@ function computeSimpleAverageFromSubmissions(submissions) {
 
   const lastSubmission = submissions[submissions.length - 1];
 
+  const validDias = submissions
+    .map((s) => s.diasCiclo)
+    .filter((v) => v !== null && v !== undefined && !isNaN(Number(v)));
+  const diasCiclo =
+    validDias.length > 0
+      ? Math.round(
+          validDias.reduce((a, b) => a + Number(b), 0) / validDias.length
+        )
+      : lastSubmission.diasCiclo !== undefined &&
+        lastSubmission.diasCiclo !== null
+      ? Number(lastSubmission.diasCiclo)
+      : null;
+
   return {
     hour: sortedHours[0] || lastSubmission.hour || "00:00",
     finalizedTime:
@@ -136,6 +153,7 @@ function computeSimpleAverageFromSubmissions(submissions) {
     totalRff: Math.round(avg((s) => s.totalRff)),
     totalHojas: Math.round(avg((s) => s.totalHojas)),
     totalPepas: Math.round(avg((s) => s.totalPepas)),
+    diasCiclo,
     submissionCount: k,
     contributors: Array.from(contributorsSet),
     longitud:
@@ -227,6 +245,10 @@ async function upsertSingleCensusSubmission({
         totalRff: Number(payload.totalRff) || 0,
         totalHojas: Number(payload.totalHojas) || 0,
         totalPepas: Number(payload.totalPepas) || 0,
+        diasCiclo:
+          payload.diasCiclo !== undefined && payload.diasCiclo !== null
+            ? Number(payload.diasCiclo)
+            : null,
         submissionCount: 1,
         contributors: [usuario],
         longitud:
@@ -267,6 +289,10 @@ async function upsertSingleCensusSubmission({
         totalRff: Number(payload.totalRff) || 0,
         totalHojas: Number(payload.totalHojas) || 0,
         totalPepas: Number(payload.totalPepas) || 0,
+        diasCiclo:
+          payload.diasCiclo !== undefined && payload.diasCiclo !== null
+            ? Number(payload.diasCiclo)
+            : null,
         longitud:
           payload.longitud !== undefined && payload.longitud !== null
             ? Number(payload.longitud)

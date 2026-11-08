@@ -41,6 +41,7 @@ describe("Organization & Censo Pre Cosecha Backend Suite", () => {
           totalRff: 40,
           totalHojas: 60,
           totalPepas: 80,
+          diasCiclo: 10,
           longitud: -74.1,
           latitud: 4.6,
         },
@@ -59,6 +60,7 @@ describe("Organization & Censo Pre Cosecha Backend Suite", () => {
           totalRff: 90,
           totalHojas: 225,
           totalPepas: 270,
+          diasCiclo: 14,
           longitud: -74.3,
           latitud: 4.8,
         },
@@ -67,6 +69,7 @@ describe("Organization & Censo Pre Cosecha Backend Suite", () => {
       const avg = computeSimpleAverageFromSubmissions(submissions);
 
       assert.equal(avg.submissionCount, 2);
+      assert.equal(avg.diasCiclo, 12);
       assert.equal(avg.palmsCounted, 25);
       assert.equal(avg.densidadConPintones, 2.5);
       assert.equal(avg.hojasConPintones, 2.0);
