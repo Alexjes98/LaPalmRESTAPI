@@ -33,6 +33,9 @@ module.exports = function () {
   // log all requests to the console
   app.use(morgan("common"));
 
+  // Trust first proxy (e.g. Nginx / AWS ALB) so express-rate-limit reads client IP from X-Forwarded-For
+  app.set("trust proxy", 1);
+
   // Rate limiting
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes

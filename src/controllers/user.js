@@ -16,31 +16,32 @@ const transporter = nodemailer.createTransport({
 });
 
 const resetPasswordRequest = async (req, res) => {
-  const { email } = req.body;
-  if (!email) {
-    return res.status(400).send("Email is required");
-  }
-  const user = await User.findOne({ where: { email } });
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).send("Email is required");
+    }
+    const user = await User.findOne({ where: { email } });
 
-  if (!user) {
-    return res.status(400).send("No account with that email address exists.");
-  }
+    if (!user) {
+      return res.status(400).send("No account with that email address exists.");
+    }
 
-  // Generate and set password reset token
-  user.resetPasswordToken = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-    expiresIn: "1h",
-  });
-  await User.update(
-    { resetPasswordToken: user.resetPasswordToken },
-    { where: { email } }
-  );
+    // Generate and set password reset token
+    user.resetPasswordToken = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
+      expiresIn: "1h",
+    });
+    await User.update(
+      { resetPasswordToken: user.resetPasswordToken },
+      { where: { email } }
+    );
 
-  await transporter.sendMail({
-    from: process.env.SMTP_USERNAME,
-    to: email,
-    subject: "Solicitud de Restablecimiento de Contraseña de Stipe",
-    text: `Estás recibiendo esto porque tú (o alguien más) has solicitado el restablecimiento de la contraseña para tu cuenta.\n\n`,
-    html: `    
+    await transporter.sendMail({
+      from: process.env.SMTP_USERNAME,
+      to: email,
+      subject: "Solicitud de Restablecimiento de Contraseña de Stipe",
+      text: `Estás recibiendo esto porque tú (o alguien más) has solicitado el restablecimiento de la contraseña para tu cuenta.\n\n`,
+      html: `    
     <h2>Solicitud de Restablecimiento de Contraseña</h2>
     <p>Hola, ${user.username},</p>
     <p>Estás recibiendo esto porque tú (o alguien más) has solicitado el restablecimiento de la contraseña para tu cuenta.</p>
@@ -48,9 +49,13 @@ const resetPasswordRequest = async (req, res) => {
     <a href="${process.env.SITE_URL}/#/resetPassword?data=${user.resetPasswordToken}">Restablecer Contraseña</a>
     <p>Si no solicitaste esto, por favor ignora este correo electrónico y tu contraseña permanecerá sin cambios.</p>
     <p>¡Gracias!</p>`,
-  });
+    });
 
-  res.status(200).json({ message: "Password reset link sent successfully" });
+    res.status(200).json({ message: "Password reset link sent successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
 };
 
 const resetPassword = async (req, res) => {
