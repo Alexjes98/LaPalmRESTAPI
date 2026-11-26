@@ -421,9 +421,9 @@ const createLote = async (req, res) => {
       });
     }
 
-    if (membership.role !== "OWNER") {
+    if (!membership || (membership.role !== "OWNER" && membership.role !== "ADMIN")) {
       return res.status(403).json({
-        message: "Solo el propietario de la organización puede crear lotes",
+        message: "Solo el propietario o administrador de la organización puede crear lotes",
         data: {},
       });
     }
@@ -486,11 +486,11 @@ const deleteLote = async (req, res) => {
       },
     });
 
-    if (!membership || membership.role !== "OWNER") {
+    if (!membership || (membership.role !== "OWNER" && membership.role !== "ADMIN")) {
       await transaction.rollback();
       return res.status(403).json({
         message:
-          "Permiso denegado: solo el propietario de la organización puede eliminar lotes",
+          "Permiso denegado: solo el propietario o administrador de la organización puede eliminar lotes",
         data: {},
       });
     }
@@ -634,11 +634,11 @@ const deleteDailyResult = async (req, res) => {
       },
     });
 
-    if (!membership || membership.role !== "OWNER") {
+    if (!membership || (membership.role !== "OWNER" && membership.role !== "ADMIN")) {
       await transaction.rollback();
       return res.status(403).json({
         message:
-          "Permiso denegado: solo el propietario de la organización puede eliminar censos",
+          "Permiso denegado: solo el propietario o administrador de la organización puede eliminar censos",
         data: {},
       });
     }
@@ -716,11 +716,11 @@ const migrateLocalLotes = async (req, res) => {
       },
     });
 
-    if (!membership || membership.role !== "OWNER") {
+    if (!membership || (membership.role !== "OWNER" && membership.role !== "ADMIN")) {
       await transaction.rollback();
       return res.status(403).json({
         message:
-          "Solo el propietario de la organización puede migrar lotes a la organización",
+          "Solo el propietario o administrador puede migrar lotes a la organización",
         data: {},
       });
     }

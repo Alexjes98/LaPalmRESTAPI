@@ -17,6 +17,10 @@ router.get("/:orgId", organizationController.getOrganizationDetail);
 router.put("/:orgId", organizationController.updateOrganization);
 router.delete("/:orgId", organizationController.deleteOrganization);
 router.post("/:orgId/invite", organizationController.inviteUser);
+router.patch(
+  "/:orgId/members/:userId/role",
+  organizationController.updateMemberRole
+);
 router.delete(
   "/:orgId/members/:userId",
   organizationController.removeMember

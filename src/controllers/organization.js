@@ -662,6 +662,84 @@ const removeMember = async (req, res) => {
   }
 };
 
+const updateMemberRole = async (req, res) => {
+  try {
+    const callerId = req.user.userId;
+    const orgId = parseInt(req.params.orgId, 10);
+    const targetUserId = parseInt(req.params.userId, 10);
+    const role = (req.body.role || "").toString().trim().toUpperCase();
+
+    if (!["ADMIN", "MEMBER"].includes(role)) {
+      return res.status(400).json({
+        message: "El rol debe ser ADMIN o MEMBER",
+        data: {},
+      });
+    }
+
+    const callerMembership = await OrganizationMember.findOne({
+      where: {
+        organizationId: orgId,
+        userId: callerId,
+        role: "OWNER",
+        status: "ACCEPTED",
+      },
+    });
+
+    if (!callerMembership) {
+      return res.status(403).json({
+        message: "Solo el propietario puede asignar administradores",
+        data: {},
+      });
+    }
+
+    const targetMembership = await OrganizationMember.findOne({
+      where: {
+        organizationId: orgId,
+        userId: targetUserId,
+      },
+    });
+
+    if (!targetMembership) {
+      return res.status(404).json({
+        message: "Miembro no encontrado en la organización",
+        data: {},
+      });
+    }
+
+    if (targetMembership.role === "OWNER") {
+      return res.status(400).json({
+        message: "No se puede cambiar el rol del propietario",
+        data: {},
+      });
+    }
+
+    if (targetMembership.status !== "ACCEPTED") {
+      return res.status(400).json({
+        message:
+          "Solo los miembros que aceptaron la invitación pueden ser asignados como administradores",
+        data: {},
+      });
+    }
+
+    targetMembership.role = role;
+    await targetMembership.save();
+
+    return res.status(200).json({
+      data: {
+        userId: targetUserId,
+        organizationId: orgId,
+        role: targetMembership.role,
+      },
+      message: "Member role updated successfully",
+    });
+  } catch (err) {
+    console.error("updateMemberRole error:", err);
+    return res
+      .status(500)
+      .json({ message: "Internal server error", data: {} });
+  }
+};
+
 module.exports = {
   createOrganization,
   getUserOrganizations,
@@ -672,5 +750,6 @@ module.exports = {
   deleteOrganization,
   inviteUser,
   removeMember,
+  updateMemberRole,
 };
 
